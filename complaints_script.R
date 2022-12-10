@@ -21,6 +21,13 @@ complaints$Company.public.response <- ifelse(complaints$Company.public.response 
 complaints$Tags<- ifelse(complaints$Tags == "", "N/A",complaints$Tags)
 complaints$Consumer.disputed.<- ifelse(complaints$Consumer.disputed. == "", "N/A",complaints$Consumer.disputed.)
 
+complaint_count <- complaints %>%
+  count(Product)
+
+ggplot(data = complaint_count, aes(x=Product, y=n))+
+         geom_bar(stat = "identity")+
+  coord_flip()
+
 complaints = df_complaints$`Consumer complaint narrative`
 
 sentiment = analyzeSentiment(complaints)
