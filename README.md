@@ -1,5 +1,21 @@
 # Complaint Analysis
 
+## Data Dictionary
+
+- Consumer Complaint Narrative: text of complaint (Text)
+
+- Issue: Issue about which complaint was registered - high level (Text)
+
+- Sub-Issue: Issue about which complaint was registered - granular level (Text)
+
+- Company: Name of Company (Text)
+
+- Product: Product about which complaint was registered (Text)
+
+- Sub-Product: Sub-Product about which complaint was registered (Text)
+
+- Tags: Description of person who complained (Text)
+
 ## Cleaning the Data
 
 After looking at the data we noticed that it was pretty clean. We only changed the blank cells to reflect "N/A" and changed the Zip Code column to be numeric. 
