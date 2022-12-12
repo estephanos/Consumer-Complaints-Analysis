@@ -6,6 +6,7 @@ library(ggplot2)
 library(tidytext)
 library(plotly)
 library(gridExtra)
+library(usmap)
 
 #Set Directory and read in file
 rm(list = ls())
@@ -70,7 +71,23 @@ ggplot(weekday_pivot, aes(x = Weekday, y = Count)) +
   labs(title = "Weekday with Most Complaints", x = "Weekday", y = "Count") +
   theme(plot.title = element_text(hjust = 0.5))
 
+#Create a State Pivot Table
+state_pivot <- complaints %>%
+  group_by(State) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count))
 
+#renaming State column to state for map plot
+state_pivot <- state_pivot %>%
+  rename("state" = "State")
+
+#Map of US: Darker orange is states with lots of complaints
+plot_usmap(data = state_pivot, values = "Count",
+           regions = "state", include = state_pivot$state) +
+  scale_fill_continuous(low = "white", high = "orange", 
+                        name = "State Complaints", label = scales::comma) + 
+  labs(title = "States with Most Complaints") +
+  theme(legend.position = "right")
 
 
 
