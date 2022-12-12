@@ -54,3 +54,15 @@ NRC categorizes words more specificly than just positive or negative. As you can
 The submitted via bar graph shows which platform complaints were sent from. As shown above web has the highest amount. Therefore, consumers submitted their complaints through most likely a website. Referral was the second highest. We assume that most companies have a tab on their websites for users to submit complaints and it is probably easier than being on the phone on hold. 
 
 The second graph shows the company's response to consumer about their complaint. Closed with an explaination was the highest. Consumer want an explaination on why they are having issues with certain products that the company offers. 
+
+![Product](/Images/ProductPlot.png)
+
+The product that had the most complaints against it was mortgage. Since the data is centered around financial institutions, they deal a lot with consumers taking out loans to purchase a house. 
+
+![Top 10 Companies](/Images/Top10Companies.png)
+
+The graph above shows the top 10 companies that had the most complaints against them. Bank of America has over 60,000 complaints against. That could be because Bank of America has several branches all over the U.S. Each state's population varies, there can be a couple million in one state and 40 million in another state. 
+
+![US Map](/Images/StateMap.png)
+
+The map above shows the number of complaints per state. The darker orange states have the most complaints against them and lighter colored states have fewer complaints against them. California has 
