@@ -66,3 +66,7 @@ The graph above shows the top 10 companies that had the most complaints against 
 ![US Map](/Images/StateMap.png)
 
 The map above shows the number of complaints per state. The darker orange states have the most complaints against them and lighter colored states have fewer complaints against them. California is a very dark orange and according to the key has over 75,000 complaints within the state. Florida is a dark orange as well. We assume the bigger states such as California, Florida, and Texas would have more complaints against them than any other state because they are highly populated.
+
+![Weekday](/Images/Weekday.png)
+
+According to the bar graph above Wednesday and Tuesday are the weekdays when most complaints are received. Some companies could send their statements or emails of surveys during the middle of week. So most people probably complain right away. 
