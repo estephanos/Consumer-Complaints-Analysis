@@ -42,3 +42,15 @@ After looking at the data we noticed that it was pretty clean. We only changed t
 
 Bing within R only categorizes by positive or negative words. The graph above shows that that are more negative words than positive words within the consumer complaint narrative. 
 We assumed since the dataset was about complaints that there would more negative words used when consumers talked to the companies about issues they were having. 
+
+![NRC Sentiment](/Images/NRCgraph.png)
+
+NRC categorizes words more specificly than just positive or negative. As you can see there is more categories that R puts words in. The NRC sentiment analysis is also using the consumer complaint narrative column. 
+
+## Explorartory Data Analysis
+
+![Submitted Via and Company Response to Consumer](/Images/SubmittedVia.png)
+
+The submitted via bar graph shows which platform complaints were sent from. As shown above web has the highest amount. Therefore, consumers submitted their complaints through most likely a website. Referral was the second highest. We assume that most companies have a tab on their websites for users to submit complaints and it is probably easier than being on the phone on hold. 
+
+The second graph shows the company's response to consumer about their complaint. Closed with an explaination was the highest. Consumer want an explaination on why they are having issues with certain products that the company offers. 
