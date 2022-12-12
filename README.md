@@ -35,3 +35,10 @@ After looking at the data we noticed that it was pretty clean. We only changed t
 `complaints$Tags<- ifelse(complaints$Tags == "", "N/A",complaints$Tags)`
 
 `complaints$Consumer.disputed.<- ifelse(complaints$Consumer.disputed. == "", "N/A",complaints$Consumer.disputed.)`
+
+## Sentiment Analysis
+
+![Bing Sentiment](/Images/BingPlot.png)
+
+Bing within R only categorizes by positive or negative words. The graph above shows that that are more negative words than positive words within the consumer complaint narrative. 
+We assumed since the dataset was about complaints that there would more negative words used when consumers talked to the companies about issues they were having. 
