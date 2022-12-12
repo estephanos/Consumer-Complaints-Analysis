@@ -10,8 +10,8 @@ library(usmap)
 
 #Set Directory and read in file
 rm(list = ls())
-setwd("~/Documents/DATA 331/Final Project")
-complaints <- read.csv("data/Consumer_Complaints.csv")
+setwd("~/Documents/Consumer-Complaints-Analysis/data")
+complaints <- read.csv("Consumer_Complaints.csv")
 
 #Clean Data - Making blank cells to N/A and making zip code numeric
 complaints$ZIP.code <- as.numeric(complaints$ZIP.code)
