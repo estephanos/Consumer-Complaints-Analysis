@@ -71,18 +71,7 @@ ggplot(weekday_pivot, aes(x = Weekday, y = Count)) +
   labs(title = "Weekday with Most Complaints", x = "Weekday", y = "Count") +
   theme(plot.title = element_text(hjust = 0.5))
 
-# Top 10 States with Most complaints
-state_pivot <- complaints %>%
-  group_by(State) %>%
-  summarize(Count = n()) %>%
-  arrange(desc(Count)) %>%
-  top_n(10)
 
-#Bar Graph of Top 10 States
-ggplot(state_pivot, aes(x = State, y = Count)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(title = "Top 10 States", x = "State", y = "Count") +
-  theme(plot.title = element_text(hjust = 0.5))
 
 
 
