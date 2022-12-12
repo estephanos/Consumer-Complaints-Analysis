@@ -4,7 +4,6 @@ library(dplyr)
 library(readxl)
 library(ggplot2)
 library(tidytext)
-library(SentimentAnalysis)
 library(plotly)
 library(gridExtra)
 
