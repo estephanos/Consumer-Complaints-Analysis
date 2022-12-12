@@ -1,0 +1,93 @@
+library(tidyverse)
+library(lubridate)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(tidytext)
+library(SentimentAnalysis)
+library(plotly)
+library(gridExtra)
+
+#Set Directory and read in file
+rm(list = ls())
+setwd("~/Documents/DATA 331/Final Project")
+complaints <- read.csv("data/Consumer_Complaints.csv")
+
+#Clean Data - Making blank cells to N/A and making zip code numeric
+complaints$ZIP.code <- as.numeric(complaints$ZIP.code)
+complaints$Consumer.consent.provided. <- ifelse(complaints$Consumer.consent.provided. == "", "N/A",complaints$Consumer.consent.provided.)
+complaints$Sub.product <- ifelse(complaints$Sub.product == "", "N/A",complaints$Sub.product)
+complaints$Sub.issue<- ifelse(complaints$Sub.issue == "", "N/A",complaints$Sub.issue)
+complaints$Consumer.complaint.narrative <- ifelse(complaints$Consumer.complaint.narrative == "", "N/A",complaints$Consumer.complaint.narrative)
+complaints$Company.public.response <- ifelse(complaints$Company.public.response == "", "N/A",complaints$Company.public.response)
+complaints$Tags<- ifelse(complaints$Tags == "", "N/A",complaints$Tags)
+complaints$Consumer.disputed.<- ifelse(complaints$Consumer.disputed. == "", "N/A",complaints$Consumer.disputed.)
+
+#Create a Table with Count of each Product
+complaint_count <- complaints %>%
+  count(Product)
+
+#Bar Graph of the count of Products
+ggplot(data = complaint_count, aes(x=Product, y=n))+
+  geom_bar(stat = "identity", fill = "purple")+
+  ylab("Count")+
+  coord_flip()
+
+#Bar Graphs: Count of Submitted Via and Consumer Response to Consumer 
+p2 <- ggplot(complaints, aes(x = Submitted.via)) + geom_bar(aes(fill = Submitted.via)) + 
+  theme(axis.text.x = element_blank()) + scale_fill_brewer(palette="Accent")
+
+p3 <- ggplot(complaints, aes(x = Company.response.to.consumer)) + geom_bar(aes(fill = Company.response.to.consumer)) + 
+  theme(axis.text.x = element_blank()) + scale_fill_brewer(palette="Dark2")
+
+#Click Zoom button to see graphs more clearly 
+grid.arrange(p2, p3)
+
+#Top 10 Companies with Most Complaints
+company_count <- complaints %>%
+  group_by(Company) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  top_n(10)
+
+#Bar Graph of Top 10 Companies
+ggplot(company_count, aes(x = Company, y = Count)) +
+  geom_bar(stat = "identity", fill = "green") +
+  coord_flip() +
+  labs(title = "Top 10 Companies", x = "Company", y = "Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Top Weekday with Most complaints
+complaints$Date.received <- as.Date(complaints$Date.received, "%m/%d/%Y")
+complaints$Weekday <- weekdays(complaints$Date.received)
+
+weekday_pivot<- complaints %>%
+  group_by(Weekday) %>%
+  summarize(Count = n())
+
+#Bar Graph of Top Weekdays
+ggplot(weekday_pivot, aes(x = Weekday, y = Count)) +
+  geom_bar(stat = "identity", fill = "orange") +
+  labs(title = "Weekday with Most Complaints", x = "Weekday", y = "Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Top 10 States with Most complaints
+state_pivot <- complaints %>%
+  group_by(State) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  top_n(10)
+
+#Bar Graph of Top 10 States
+ggplot(state_pivot, aes(x = State, y = Count)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Top 10 States", x = "State", y = "Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+
+
+
+
+
+
