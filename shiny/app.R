@@ -86,8 +86,13 @@ ui <- fluidPage(
       plotlyOutput(outputId = "distplot"), br(),
       br(),
       plotlyOutput(outputId = "plot2"), br(),
+<<<<<<< Updated upstream
       plotlyOutput(outputId = "plot3"), br(),
       plotlyOutput(outputId = "plot4")
+=======
+      plotlyOutput(outputId = "plot4"), br(),
+      plotlyOutput(outputId = "plot3")
+>>>>>>> Stashed changes
       )
     )
 )

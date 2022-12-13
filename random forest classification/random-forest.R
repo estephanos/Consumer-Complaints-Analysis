@@ -6,6 +6,7 @@ library(lubridate)
 library(caret)
 library(CatEncoders)
 library(explore)
+library(rfUtilities)
 library(ggplot2)
 
 rm(list = ls())
@@ -15,14 +16,11 @@ setwd("C:/Users/estif/OneDrive/Documents/Data-331/Consumer-Complaints-Analysis/C
 
 df_complaints <- read_csv("Consumer_Complaints.csv")
 
-#removing nas
-df_complaints %>% 
-  mutate(`Consumer disputed?` = ifelse(is.na(`Consumer disputed?`), mode(`Consumer disputed?`), `Consumer disputed?`))%>%
-  drop_na(Product)
 
 round(colMeans(is.na(df_complaints)),4)*100
 
 df_complaints = df_complaints[sample(nrow(df_complaints), 10000), ]
+df= df_complaints[sample(nrow(df_complaints), 10000), ]
 
 #encoding variables
 df_complaints$`Consumer encode` = as.numeric(factor(df_complaints$`Consumer disputed?`))
@@ -44,11 +42,16 @@ y_train <- y %>% dplyr::sample_frac(0.75)
 x_test  <- anti_join(x, x_train, by = 'ID')
 y_test = anti_join(y, y_train, by = "ID")
 
+#join test and train data
 train = x_train%>%
   left_join(y_train, by = 'ID')
+test = x_test%>%
+  left_join(y_test, by = 'ID')
+test = test%>%select(-'ID')
 
 #remove nas
 train = train[complete.cases(train), ] 
+test = test[complete.cases(test), ] 
 
 train = train%>%select(-'ID')
 
@@ -59,24 +62,26 @@ train = train%>%select(-'ID')
 # 
 # pre.x_test = preProcess(x_test, method=c("center", "scale"))
 # x_test <- predict(pre.x_test, x_test)
+train$Consumer.disputed. = as.factor(train$Consumer.disputed.)
+class(train$Consumer.disputed.)
 
 #building random forest classifier
 classifier_RF = randomForest(x = train[-4],
                              y = train$Consumer.disputed.,
-                             ntree=1000,
-                             keep.forest=FALSE, importance=TRUE)
+                             ntree=1000, importance=TRUE)
 
 classifier_RF
 
-test = x_test%>%
-  left_join(y_test, by = 'ID')
-test = test%>%select(-'ID')
 
 y_pred = predict(classifier_RF, newdata = test[-4])
 y_pred = as.data.frame(y_pred)
 
-confusion_mtx = table(test[, 4], y_pred)
-confusion_mtx = as.data.frame(confusion_mtx)
+y_test = as.data.frame(test$Consumer.disputed.)
+
+confusion_mtx = confusionMatrix(y_pred, y_test)
+
+
+accuracy(y_pred, y_test)
 
 # Plotting model
 plot(classifier_RF)
@@ -104,4 +109,4 @@ ggplot(ImpData, aes(x=Var.Names, y=`%IncMSE`)) +
     panel.border = element_blank(),
     axis.ticks.y = element_blank()
   )
-
+accuracy(test$Consumer.disputed., y_pred)
