@@ -3,15 +3,23 @@ library(lubridate)
 library(dplyr)
 library(readxl)
 library(ggplot2)
+library(ggthemes)
 library(tidytext)
+library(anytime)
 library(plotly)
 library(gridExtra)
+library(hrbrthemes)
 library(usmap)
 
 #Set Directory and read in file
 rm(list = ls())
+<<<<<<< Updated upstream
 setwd("~/Documents/Consumer-Complaints-Analysis/data")
 complaints <- read.csv("Consumer_Complaints.csv")
+=======
+setwd("C:/Users/estif/OneDrive/Documents/Data-331/Consumer-Complaints-Analysis/Consumer-Complaints-Analysis-main/data")
+complaints <- read.csv("Consumer_Complaints_subsample.csv")
+>>>>>>> Stashed changes
 
 #Clean Data - Making blank cells to N/A and making zip code numeric
 complaints$ZIP.code <- as.numeric(complaints$ZIP.code)
@@ -52,7 +60,7 @@ company_count <- complaints %>%
 
 #Bar Graph of Top 10 Companies
 ggplot(company_count, aes(x = Company, y = Count)) +
-  geom_bar(stat = "identity", fill = "green") +
+  geom_bar(stat = "identity", fill = "seagreen3") +
   coord_flip() +
   labs(title = "Top 10 Companies", x = "Company", y = "Count") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -90,9 +98,34 @@ plot_usmap(data = state_pivot, values = "Count",
   theme(legend.position = "right")
 
 
+df_timely <- complaints[complaints$Timely.response. == "Yes",]
+df_timely = df_timely%>%
+  group_by(Company) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  top_n(10)
 
+ggplot(df_timely,aes(x= reorder(Company, -Count),y = Count, fill = Company))+
+  geom_bar(stat ="identity")+
+  theme(legend.position = "none")+
+  scale_fill_brewer(palette = "Set3") +
+  labs(title = "Companies with Timely Response", x = "Companies")+
+  theme_wsj()
 
+complaints$Date.received = anydate(complaints$Date.received)
 
+complaints$year = format(complaints$Date.received, "%Y")
 
+by_year = complaints%>%
+  group_by(year)%>%
+  summarise(`No. of complaints` = n())
+by_year$year = as.numeric(by_year$year)
+  
 
+ggplot(by_year, aes(x=year, y = `No. of complaints`)) +
+  geom_line() + 
+  geom_point(aes(y = `No. of complaints`, color = `No. of complaints`, size = 4)) +
+  labs(title = "Number of complaints from 2011-2016", x = "Year")+
+  theme_modern_rc() +
+  theme(axis.text.x=element_text(angle=60, hjust=1))
 
