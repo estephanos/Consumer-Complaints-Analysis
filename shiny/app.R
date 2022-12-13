@@ -8,6 +8,9 @@ library(plotly)
 library(dplyr)
 library(tidyverse)
 library(anytime)
+library(summaryBox)
+library(shinythemes)
+
 
 setwd("C:/Users/estif/OneDrive/Documents/Data-331/Consumer-Complaints-Analysis/Consumer-Complaints-Analysis-main/data")
 complaints <- read_csv("Consumer_Complaints_subsample.csv")
@@ -24,6 +27,8 @@ complaints = complaints%>%
 
 
 ui <- fluidPage(
+  theme = shinytheme("slate"),
+  uiOutput("summarybox", fixed = TRUE), br(),
   sidebarLayout(
     sidebarPanel(
       h2("Consumer Complaints Dashboard"),
@@ -39,33 +44,33 @@ ui <- fluidPage(
                   choices = c("Select Product","Mortgage", "Debt collection", "Credit reporting", "Bank account or service", "Credit card", "Consumer Loan"),
                   multiple = TRUE,
                   selected = "Select Product"
-                  ),
+      ),
       
       selectizeInput(inputId = "company", label = "Company",
-                  choices = c("Select Company", 
-                              "Equifax",
-                              "Bank of America",
-                              "Wells Fargo & Company",
-                              "TransUnion Intermediate Holdings, Inc.",
-                              "Experian",
-                              "JPMorgan Chase & Co.",
-                              "Citibank",
-                              "Ocwen",
-                              "Capital One",
-                              "Nationstar Mortgage",
-                              "Synchrony Financial",
-                              "Ditech Financial LLC",
-                              "U.S. Bancorp",
-                              "Navient Solutions, Inc.",
-                              "Encore Capital Group",
-                              "Portfolio Recovery Associates, Inc.",
-                              "PNC Bank N.A.",
-                              "Amex"),
-                  multiple = TRUE,
-                  options = list(maxItems = 10, closeAfterSelect = TRUE),
-                  selected="Select Company"
-
-                  ),
+                     choices = c("Select Company", 
+                                 "Equifax",
+                                 "Bank of America",
+                                 "Wells Fargo & Company",
+                                 "TransUnion Intermediate Holdings, Inc.",
+                                 "Experian",
+                                 "JPMorgan Chase & Co.",
+                                 "Citibank",
+                                 "Ocwen",
+                                 "Capital One",
+                                 "Nationstar Mortgage",
+                                 "Synchrony Financial",
+                                 "Ditech Financial LLC",
+                                 "U.S. Bancorp",
+                                 "Navient Solutions, Inc.",
+                                 "Encore Capital Group",
+                                 "Portfolio Recovery Associates, Inc.",
+                                 "PNC Bank N.A.",
+                                 "Amex"),
+                     multiple = TRUE,
+                     options = list(maxItems = 10, closeAfterSelect = TRUE),
+                     selected="Select Company"
+                     
+      ),
       
       selectInput(inputId = "issues", label = "Issues",
                   choices = c("Incorrect information on credit report", "Incorrect information on credit report",
@@ -77,24 +82,21 @@ ui <- fluidPage(
       dateRangeInput(inputId = "date", "Date range",
                      start = min(complaints$`Date received`),
                      end   = max(complaints$`Date received`)
-                     ),
+      ),
       
       downloadButton(outputId = "download_data", label = "Download Data"),
       style = "position: fixed; overflow: visible;"
     ),
     mainPanel(
+      
+      
       plotlyOutput(outputId = "distplot"), br(),
       br(),
       plotlyOutput(outputId = "plot2"), br(),
-<<<<<<< Updated upstream
       plotlyOutput(outputId = "plot3"), br(),
       plotlyOutput(outputId = "plot4")
-=======
-      plotlyOutput(outputId = "plot4"), br(),
-      plotlyOutput(outputId = "plot3")
->>>>>>> Stashed changes
-      )
     )
+  )
 )
 
 
@@ -104,11 +106,26 @@ server <- function(input, output) {
   #          Product %in% input$products &
   #            Company %in% input$company &
   #            `Date received` >= input$date[1] & `Date received` <= input$date[2])})
+ 
+
+#summary boxes
+  output$summarybox <- renderUI({
+    
+    fixedRow(
+      summaryBox2("Company with most complaints", "Equifax (7.5%)", width = 3, icon = "fas fa-chart-bar", style = "info"),
+      summaryBox2("Product with most complaints", "Mortgage (25.6%)", width = 3, icon = "fas fa-dollar-sign", style = "success"),
+      summaryBox2("State with most Complaints", "CA (14.2%)", width = 3, icon = "fas fa-clipboard-list", style = "danger"), fixed = TRUE
+    )
+    
+  })
+  
+  
+  
   
   #first plot
   output$distplot <- renderPlotly({
     
-# if product selected as feature
+    # if product selected as feature
     if(input$feature == "Product"){
       products = complaints%>%
         filter(`Date received` >= input$date[1] & `Date received` <= input$date[2])%>%
@@ -123,7 +140,7 @@ server <- function(input, output) {
         theme(plot.title = element_text(hjust = 0.5))+
         theme_economist()
       
-# if company selected as feature     
+      # if company selected as feature     
     }else if(input$feature == "Company"){
       companies = complaints %>%
         filter(`Date received` >= input$date[1] & `Date received` <= input$date[2])%>%
@@ -138,7 +155,7 @@ server <- function(input, output) {
         theme(plot.title = element_text(hjust = 0.5))+
         theme_economist()
       
-# if issue selected as feature
+      # if issue selected as feature
     }else if(input$feature == "Issue"){
       issues = complaints %>%
         filter(`Date received` >= input$date[1] & `Date received` <= input$date[2])%>%
@@ -155,7 +172,7 @@ server <- function(input, output) {
     }
     
     plot1
-      
+    
   })
   
   #second plot
@@ -232,3 +249,4 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
+
